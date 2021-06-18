@@ -57,5 +57,5 @@ public class AnalysisController {
     public ResponseVO getStructureInfo(StructureDTO param){
         return studentService.getStructureInfo(param);
     }
-    //test
+    //test1
 }
