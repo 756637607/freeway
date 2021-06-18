@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.system.freeway.mapper.AnalysisMapper">
+    <resultMap id="analysisMap" type="com.system.freeway.model.analysis.vo.AnalysisVO">
+        <result column="方向" property="direction"/>
+        <result column="起点省份" property="startProvince"/>
+        <result column="起点地市" property="startCounty" />
+        <result column="终点省份" property="endProvince" />
+        <result column="终点地市" property="endCounty" />
+        <result column="货类" property="goodType" />
+        <result column="通道" property="freewayName" />
+        <result column="日期" property="date" />
+        <result column="运量（万吨）" property="yunliang" />
+        <result column="平均运距（km）" property="yunju" />
+        <result column="货运周转量" property="zhouzhuan" />
+        <result column="日均单车载重量（吨/车）" property="zaizhong" />
+        <result column="车辆数" property="carnum" />
+        <result column="占比" property="zb" />
+        <result column="环比" property="hb" />
+    </resultMap>
+    <select id="getAnalysisInfo" resultMap="analysisMap" statementType="CALLABLE">
+        CALL sub_get_province_county_data6(
+        #{chongqingCounty},
+        #{otherProvince},
+        #{otherCounty},
+        #{goodType},
+        #{freewayName},
+        #{sumColumnName},
+        #{direction},
+        #{startDate},
+        #{endDate},
+        #{isSumDate}
+        )
+    </select>
+    
+    <select id="decisionAnalysis" resultMap="analysisMap" statementType="CALLABLE">
+        CALL sub_get_freeway_data(
+        #{goodType},
+        #{freewayName},
+        #{sumColumnName},
+        #{direction}
+        )
+    </select>
+    
+    <resultMap id="countyMap" type="map">
+        <result column="终点地市" property="county"/>
+    </resultMap>
+    <select id="getCountyList" resultMap="countyMap" statementType="CALLABLE">
+        CALL sub_get_county_list(#{provinceName})
+    </select>
+    
+    <resultMap id="tableMap" type="com.system.freeway.model.analysis.vo.TableListVO">
+        <result column="记录总数" property="total"/>
+        <result column="入口地市" property="inCounty" />
+        <result column="入口省份" property="inProvince"/>
+        <result column="入口时间" property="inTime" />
+        <result column="出口地市" property="outCounty" />
+        <result column="出口省份" property="outProvince" />
+        <result column="出口时间" property="outTime" />
+        <result column="货运量" property="yunliang" />
+        <result column="平均运距" property="yunju" />
+        <result column="平均速度" property="speed" />
+        <result column="货类" property="goodType" />
+    </resultMap>
+    <select id="getTableList" resultMap="tableMap" statementType="CALLABLE">
+        CALL sub_condition_query(
+		#{startDate},
+		#{endDate},
+		#{startProvince},
+		#{startCounty},
+		#{endProvince},
+		#{endCounty},
+		#{goodType},
+		#{pageNum},
+		#{pageSize}
+		)
+    </select>
+    
+    <resultMap id="structureMap" type="com.system.freeway.model.analysis.vo.StructureVO">
+        <result column="日期" property="date"/>
+        <result column="货类" property="goodType" />
+        <result column="运量（万吨）" property="yunliang" />
+        <result column="环比" property="hb"/>
+    </resultMap>
+    <select id="getStructureInfo" resultMap="structureMap" statementType="CALLABLE">
+        CALL sub_distance_analyse(
+		#{startDate},
+		#{endDate},
+		#{goodType},
+		#{distanceRange}
+		)
+    </select>
+</mapper>

@@ -1,0 +1,16 @@
+server:
+  port: 8755
+
+spring:
+  application:
+    name: freeway
+      #数据源
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://183.64.110.139:36036/test?useSSL=false&noAccessToProcedureBodies=true
+    username: freeway
+    password: freeway@2018
+
+#mybatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
